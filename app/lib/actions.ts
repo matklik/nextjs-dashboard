@@ -72,14 +72,12 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-export async function updateInvoice(prevState: State, id: string, formData: FormData) {
+export async function updateInvoice(id: string, prevState: State, formData: FormData,) {
     const validatedFields = UpdateInvoice.safeParse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'), 
     });
-
-    console.log(validatedFields);
 
     if (!validatedFields.success) {
         return {
@@ -90,9 +88,6 @@ export async function updateInvoice(prevState: State, id: string, formData: Form
 
     const { customerId, amount, status } = validatedFields.data;
     const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
-
-    console.log(validatedFields);
 
     try {
         await sql `
